@@ -4,12 +4,12 @@ public class Main {
 
 	public static int rozmiarGenotypu;
 	public static int rozmiarPopulacji;
-	public static ArrayList<Osobnik> listaOsobnikow;
+//	public static ArrayList<Osobnik> listaOsobnikow;
 	public static ArrayList<Miejsce> listaMiejsc;
 	
 	public static void main(String[] args) {
 		
-		listaOsobnikow = new ArrayList<Osobnik>();
+//		listaOsobnikow = new ArrayList<Osobnik>();
 		listaMiejsc = new ArrayList<Miejsce>();
 		rozmiarPopulacji = 20;
 
@@ -21,21 +21,21 @@ public class Main {
 		
 		System.out.println("Rozmiar: " + rozmiarGenotypu);
 		
-		for(int i=0; i<rozmiarPopulacji; i++) {
-			Osobnik osobnik = new Osobnik(rozmiarGenotypu);
-			listaOsobnikow.add(osobnik);
-		}
-		
-		for(int j=0; j<listaOsobnikow.size(); j++) {
-			System.out.println(listaOsobnikow.get(j).toString());
-		}
+//		for(int i=0; i<rozmiarPopulacji; i++) {
+//			Osobnik osobnik = new Osobnik(rozmiarGenotypu);
+//			listaOsobnikow.add(osobnik);
+//		}
+//		
+//		for(int j=0; j<listaOsobnikow.size(); j++) {
+//			System.out.println(listaOsobnikow.get(j).toString());
+//		}
 		
 		for(int j=0; j<listaMiejsc.size(); j++) {
 			System.out.println(listaMiejsc.get(j).toString());
 		}
 		
-		Algorytm algorytm = new Algorytm(20);
-		System.out.println(algorytm.odlegloscEuklidesowa(listaMiejsc.get(0), listaMiejsc.get(1)));
+		Algorytm algorytm = new Algorytm(100, rozmiarGenotypu);
+//		System.out.println(algorytm.odlegloscEuklidesowa(listaMiejsc.get(0), listaMiejsc.get(1)));
 		
 
 	}
