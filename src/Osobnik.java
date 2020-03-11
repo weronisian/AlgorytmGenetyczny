@@ -13,15 +13,6 @@ public class Osobnik {
 		dlugoscTrasy = obliczDlugoscTrasy();
 	}
 	
-	private double obliczDlugoscTrasy() {		
-		double suma = 0;
-		for(int i=0; i<rozmiar-1; i++) {
-			suma += Algorytm.odlegloscEuklidesowa(Main.listaMiejsc.get(genotyp[i]-1), Main.listaMiejsc.get(genotyp[i+1]-1));
-		}	
-		suma += Algorytm.odlegloscEuklidesowa(Main.listaMiejsc.get(rozmiar-1), Main.listaMiejsc.get(0));
-		return suma;
-	}
-
 	public void wygeneruj() {
 		for(int i=1; i<rozmiar+1; i++) {
 			int rand = (int)(Math.random()*rozmiar);
@@ -31,6 +22,24 @@ public class Osobnik {
 			genotyp[rand] = i;
 		}
 	}
+	
+	private double obliczDlugoscTrasy() {		
+		double suma = 0;
+		for(int i=0; i<rozmiar-1; i++) {
+			suma += odlegloscEuklidesowa(Main.listaMiejsc.get(genotyp[i]-1), Main.listaMiejsc.get(genotyp[i+1]-1));
+		}	
+		suma += odlegloscEuklidesowa(Main.listaMiejsc.get(rozmiar-1), Main.listaMiejsc.get(0));
+		return suma;
+	}
+	
+	public double odlegloscEuklidesowa(Miejsce m1, Miejsce m2) {
+		float x1 = m1.getX();
+		float x2 = m2.getX();
+		float y1 = m1.getY();
+		float y2 = m2.getY();
+		double odleglosc = Math.sqrt(Math.pow((x2-x1),2)+ Math.pow((y2-y1), 2));	
+		return odleglosc;
+	}
 
 	@Override
 	public String toString() {
@@ -38,7 +47,5 @@ public class Osobnik {
 				+ dlugoscTrasy + "]";
 	}
 
-	
-	
-	
+		
 }

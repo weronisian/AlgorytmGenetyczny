@@ -5,11 +5,11 @@ import java.io.FileReader;
 public class Plik {
 
 	private File plik;
+	public static String NAME = "NAME:";
 	public static String SIZE = "DIMENSION:";
 	public static String TYP = "EDGE_WEIGHT_TYPE:";
 	public static String COORD_SECTION = "NODE_COORD_SECTION";
 	public static String EOF = "EOF";
-
 	
 	public Plik(String sciezka) {
 		this.plik = new File(sciezka);
@@ -21,13 +21,13 @@ public class Plik {
 		try {
 			BufferedReader odczyt = new BufferedReader(new FileReader(plik));
 
-			while((linia = odczyt.readLine()) !=null) {
+			while((linia = odczyt.readLine()) != null) {
 				if(linia.equals(COORD_SECTION)) {
 					linia = odczyt.readLine();
 					odczytMiejsc = true;
 				}
 				if(linia.equals(EOF)) {
-					linia = odczyt.readLine();
+//					linia = odczyt.readLine();
 					odczytMiejsc = false;
 				}
 				odczytWiersza(linia, odczytMiejsc);
@@ -47,9 +47,7 @@ public class Plik {
 			Miejsce miejsce = new Miejsce(Integer.parseInt(wiersz[0]),Float.parseFloat(wiersz[1]), Float.parseFloat(wiersz[2]));
 			Main.listaMiejsc.add(miejsce);
 		}
-//		for(int i=0; i<wiersz.length; i++) {
-//			System.out.println(wiersz[i]);
-//		}
+		//wyswietlanie pliku
 		System.out.println(linia);
 	}
 
