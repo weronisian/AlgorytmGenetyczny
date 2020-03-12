@@ -6,16 +6,25 @@ public class Osobnik {
 	private int rozmiar;
 	public double dlugoscTrasy;
 	
-	public Osobnik(int size, boolean algZachlanny) {
-		this.rozmiar = size;
-		genotyp = new int[rozmiar];
-	}
-	
+	//losowy genotyp
 	public Osobnik(int size) {
 		this.rozmiar = size;
 		genotyp = new int[rozmiar];		
 		wygeneruj();
 		dlugoscTrasy = obliczDlugoscTrasy();
+	}
+	
+	public Osobnik(Osobnik os) {
+		this.rozmiar = os.rozmiar;
+		this.genotyp = new int[rozmiar];
+		for(int i=0; i<rozmiar; i++) 
+			genotyp[i] = os.genotyp[i];
+		dlugoscTrasy = obliczDlugoscTrasy();
+	}
+	
+	public Osobnik(int size, boolean algZachlanny) {
+		this.rozmiar = size;
+		genotyp = new int[rozmiar];
 	}
 	
 	public void wygeneruj() {

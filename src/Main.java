@@ -14,10 +14,11 @@ public class Main {
 		Plik plik1 = new Plik(pliki[0]);
 		plik1.odczyt();	
 				
-		rozmiarPopulacji = 100000;
+		rozmiarPopulacji = 10;
 		Algorytm algorytm = new Algorytm(rozmiarPopulacji, rozmiarGenotypu);
+		algorytm.start();
 		
-		AlgorytmZachlanny algZachlanny = new AlgorytmZachlanny(rozmiarGenotypu);
+//		AlgorytmZachlanny algZachlanny = new AlgorytmZachlanny(rozmiarGenotypu);
 
 	}
 
