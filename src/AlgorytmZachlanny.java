@@ -1,8 +1,8 @@
 
 public class AlgorytmZachlanny {
 	
-	public boolean[] visited;
-	public Osobnik optymalneRozw, najlRozw;
+	private boolean[] visited;
+	private Osobnik optymalneRozw, najlRozw;
 	
 	public AlgorytmZachlanny (int rozmiarGenotypu) {
 		optymalneRozw = new Osobnik(rozmiarGenotypu, true);
@@ -34,23 +34,27 @@ public class AlgorytmZachlanny {
 		optymalneRozw.genotyp[0] = rand;
 		visited[rand-1] = true;
 		
+		
 		int lastNode = rand;
-		int bestNode = 0;
-		double bestOdleglosc = Double.MAX_VALUE;
+		int bestNode = -1;
+		double bestOdleglosc;
 		for(int i=1; i<Main.rozmiarGenotypu; i++) {
+			bestOdleglosc = Double.MAX_VALUE;
 			for(int j=0; j<Main.rozmiarGenotypu; j++) {
 				if(visited[j] == false) {
 					double odleglosc = optymalneRozw.odlegloscEuklidesowa(Main.listaMiejsc.get(lastNode-1), Main.listaMiejsc.get(j));
+//					System.out.println("i:"+i+" j:"+j+" odl:"+odleglosc);
 					if(odleglosc < bestOdleglosc) {
 						bestNode = Main.listaMiejsc.get(j).getNr();
 						bestOdleglosc = odleglosc;
 					}					
 				}				
-			}
-			bestOdleglosc = Double.MAX_VALUE;
+			}			
 			lastNode = bestNode;
 			visited[bestNode-1] = true;
 			optymalneRozw.genotyp[i] = bestNode;
+//			System.out.println(optymalneRozw);
+			
 		}
 		optymalneRozw.dlugoscTrasy = optymalneRozw.obliczDlugoscTrasy();
 	}
@@ -62,7 +66,7 @@ public class AlgorytmZachlanny {
 	
 	public void wyswietlNajlRozw() {
 		System.out.println("---------------\nAlgorytm zach³anny \nNajlepsze rozwi¹zanie: " + String.format("%.2f", najlRozw.dlugoscTrasy));
-//		System.out.println(najlRozw);
+		System.out.println(najlRozw);
 	}
 	
 }

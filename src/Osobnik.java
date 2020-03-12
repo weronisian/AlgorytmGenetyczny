@@ -33,7 +33,8 @@ public class Osobnik {
 		for(int i=0; i<rozmiar-1; i++) {
 			suma += odlegloscEuklidesowa(Main.listaMiejsc.get(genotyp[i]-1), Main.listaMiejsc.get(genotyp[i+1]-1));
 		}	
-		suma += odlegloscEuklidesowa(Main.listaMiejsc.get(rozmiar-1), Main.listaMiejsc.get(0));
+		suma += odlegloscEuklidesowa(Main.listaMiejsc.get(genotyp[rozmiar-1]-1), Main.listaMiejsc.get(genotyp[0]-1));
+//		suma += odlegloscEuklidesowa(Main.listaMiejsc.get(rozmiar-1), Main.listaMiejsc.get(0));
 		return suma;
 	}
 	
