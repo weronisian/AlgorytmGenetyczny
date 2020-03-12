@@ -11,8 +11,7 @@ public class Main {
 		
 		listaMiejsc = new ArrayList<Miejsce>();	
 
-		Plik plik1 = new Plik("C:\\Users\\werci\\Desktop\\Semestr 6\\Sztuczna inteligencja i in¿ynieria wiedzy\\laboratorium\\"+
-								"TSP dane\\" + pliki[0]);
+		Plik plik1 = new Plik(pliki[1]);
 		plik1.odczyt();			
 		
 		rozmiarPopulacji = 10000;
