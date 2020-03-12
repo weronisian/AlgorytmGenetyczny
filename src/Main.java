@@ -24,6 +24,7 @@ public class Main {
 		rozmiarPopulacji = 100;
 		Algorytm algorytm = new Algorytm(rozmiarPopulacji, rozmiarGenotypu);
 		
+		AlgorytmZachlanny algZachlanny = new AlgorytmZachlanny(rozmiarGenotypu);
 
 	}
 

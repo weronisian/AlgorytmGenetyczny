@@ -26,6 +26,10 @@ public class Miejsce {
 	public void setY(float y) {
 		this.y = y;
 	}
+	
+	public int getNr() {
+		return nr;
+	}
 
 	@Override
 	public String toString() {

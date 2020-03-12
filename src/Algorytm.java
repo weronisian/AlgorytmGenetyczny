@@ -38,7 +38,7 @@ public class Algorytm {
 	}
 	
 	private void wyswietlNajlepszeRozw() {
-		System.out.println("Najlepsze rozwi¹zanie: " + String.format("%.2f", najlepszeRozw.dlugoscTrasy));
+		System.out.println("Algorytm losowy \nNajlepsze rozwi¹zanie: " + String.format("%.2f", najlepszeRozw.dlugoscTrasy));
 	}
 	
 	

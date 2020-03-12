@@ -43,6 +43,7 @@ public class Plik {
 		String wiersz[] = linia.split(" ");
 		if(wiersz[0].equals(SIZE))
 			Main.rozmiarGenotypu = Integer.parseInt(wiersz[1]);
+		//dodanie miejsc do listy
 		if(odczytMiejsc == true) {
 			Miejsce miejsce = new Miejsce(Integer.parseInt(wiersz[0]),Float.parseFloat(wiersz[1]), Float.parseFloat(wiersz[2]));
 			Main.listaMiejsc.add(miejsce);

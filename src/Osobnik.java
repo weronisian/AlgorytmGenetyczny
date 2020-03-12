@@ -6,6 +6,11 @@ public class Osobnik {
 	private int rozmiar;
 	public double dlugoscTrasy;
 	
+	public Osobnik(int size, boolean algZachlanny) {
+		this.rozmiar = size;
+		genotyp = new int[rozmiar];
+	}
+	
 	public Osobnik(int size) {
 		this.rozmiar = size;
 		genotyp = new int[rozmiar];		
@@ -23,7 +28,7 @@ public class Osobnik {
 		}
 	}
 	
-	private double obliczDlugoscTrasy() {		
+	public double obliczDlugoscTrasy() {		
 		double suma = 0;
 		for(int i=0; i<rozmiar-1; i++) {
 			suma += odlegloscEuklidesowa(Main.listaMiejsc.get(genotyp[i]-1), Main.listaMiejsc.get(genotyp[i+1]-1));
