@@ -2,17 +2,12 @@ import java.util.ArrayList;
 
 public class Algorytm {
 	
-//	public int rozmiarGenotypu;
-//	public int rozmiarPopulacji;
 	public static ArrayList<Osobnik> listaOsobnikow;
 	private Osobnik najlepszeRozw;
 
 	public Algorytm(int rozmiarPopulacji, int rozmiarGenotypu) {
-//		this.rozmiarPopulacji = rozmiarPopulacji;
-//		this.rozmiarGenotypu = rozmiarGenotypu;
 		Algorytm.listaOsobnikow = wygenerujPopulacje(rozmiarPopulacji, rozmiarGenotypu);
-		wyswietlNajlepszeRozw();
-		
+		wyswietlNajlepszeRozw();		
 	}
 	
 	public ArrayList<Osobnik> wygenerujPopulacje(int rozmiarPopulacji, int rozmiarGenotypu) {
@@ -38,7 +33,7 @@ public class Algorytm {
 	}
 	
 	private void wyswietlNajlepszeRozw() {
-		System.out.println("Algorytm losowy \nNajlepsze rozwi¹zanie: " + String.format("%.2f", najlepszeRozw.dlugoscTrasy));
+		System.out.println("---------------\nAlgorytm losowy \nNajlepsze rozwi¹zanie: " + String.format("%.2f", najlepszeRozw.dlugoscTrasy));
 	}
 	
 	

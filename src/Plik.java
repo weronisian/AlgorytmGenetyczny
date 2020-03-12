@@ -10,6 +10,7 @@ public class Plik {
 	public static String TYP = "EDGE_WEIGHT_TYPE:";
 	public static String COORD_SECTION = "NODE_COORD_SECTION";
 	public static String EOF = "EOF";
+	public String name;
 	
 	public Plik(String sciezka) {
 		this.plik = new File(sciezka);
@@ -27,12 +28,12 @@ public class Plik {
 					odczytMiejsc = true;
 				}
 				if(linia.equals(EOF)) {
-//					linia = odczyt.readLine();
 					odczytMiejsc = false;
 				}
 				odczytWiersza(linia, odczytMiejsc);
 			}		
 			odczyt.close();
+			wyswietlInfo();
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
@@ -41,6 +42,8 @@ public class Plik {
 	
 	private void odczytWiersza(String linia, boolean odczytMiejsc) {
 		String wiersz[] = linia.split(" ");
+		if(wiersz[0].equals(NAME))
+			name = wiersz[1];
 		if(wiersz[0].equals(SIZE))
 			Main.rozmiarGenotypu = Integer.parseInt(wiersz[1]);
 		//dodanie miejsc do listy
@@ -49,7 +52,11 @@ public class Plik {
 			Main.listaMiejsc.add(miejsce);
 		}
 		//wyswietlanie pliku
-		System.out.println(linia);
+//		System.out.println(linia);
+	}
+	
+	public void wyswietlInfo() {
+		System.out.println("Plik\nNAME: " + name + "\nDIMENSION: "+Main.rozmiarGenotypu);
 	}
 
 	public void zapis() {
