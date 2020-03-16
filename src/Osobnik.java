@@ -22,7 +22,7 @@ public class Osobnik {
 		dlugoscTrasy = obliczDlugoscTrasy();
 	}
 	
-	public Osobnik(int size, boolean algZachlanny) {
+	public Osobnik(int size, boolean pustyOsobnik) {
 		this.rozmiar = size;
 		genotyp = new int[rozmiar];
 	}

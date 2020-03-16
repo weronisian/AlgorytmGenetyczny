@@ -11,7 +11,7 @@ public class Main {
 		
 		listaMiejsc = new ArrayList<Miejsce>();	
 
-		Plik plik1 = new Plik(pliki[0]);
+		Plik plik1 = new Plik(pliki[1]);
 		plik1.odczyt();	
 				
 		rozmiarPopulacji = 10;
