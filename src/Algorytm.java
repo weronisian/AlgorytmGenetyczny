@@ -7,18 +7,22 @@ public class Algorytm {
 	public static ArrayList<Osobnik> populacja;
 	public ArrayList<Osobnik> nowaPopulacja;
 	private Osobnik najlepszeRozw;
+	private double prawdMut;
 	private int iloscPokolen;
 
-	public Algorytm(int rozmiarPopulacji, int rozmiarGenotypu) {
+	public Algorytm(int rozmiarPopulacji, int rozmiarGenotypu, int iloscPokolen, double prawdMutacji) {
+		this.prawdMut = prawdMutacji;
+		this.iloscPokolen = iloscPokolen;
 		Algorytm.populacja = wygenerujPopulacje(rozmiarPopulacji, rozmiarGenotypu);
 		wyswietlNajlepszeRozw();		
 	}
 	
 	public void start() {
 		nowaPopulacja = new ArrayList<Osobnik>();
-		selekcjaTurniej(3, Main.rozmiarPopulacji);
+		selekcjaTurniej(3, Main.rozmiarPopulacji, populacja);
 		
 		System.out.println("\nNowa populacja po selekcji");
+		//wyœwietlanie
 //		for(int j=0; j<nowaPopulacja.size(); j++) {
 //			System.out.println(nowaPopulacja.get(j).toString());
 //		}
@@ -28,28 +32,38 @@ public class Algorytm {
 		nowaPopulacja = krzyzowanie(nowaPopulacja);
 		
 		System.out.println("\nNowa populacja po krzyzowaniu");
+		//wyœwietlanie
 //		for(int j=0; j<nowaPopulacja.size(); j++) {
 //			System.out.println(nowaPopulacja.get(j).toString());
 //		}
 		najlepszeRozw(nowaPopulacja);
 		wyswietlNajlepszeRozw();
+		
+		mutacja(prawdMut, nowaPopulacja);
+		
+		System.out.println("\nNowa populacja po mutacji");
+		//wyœwietlanie
+//		for(int j=0; j<nowaPopulacja.size(); j++) {
+//			System.out.println(nowaPopulacja.get(j).toString());
+//		}
+		najlepszeRozw(nowaPopulacja);
+		wyswietlNajlepszeRozw();
+		
+		//zast¹pienie starej populacji now¹
+		populacja = nowaPopulacja;
+		
+		//do testowania mutacji
 //		Osobnik os = new Osobnik(11);
 //		System.out.println(os);
-//		mutacja(os);
+//		mutacjaOsobnika(os);
 //		System.out.println(os);
 	}
 	
 	public ArrayList<Osobnik> wygenerujPopulacje(int rozmiarPopulacji, int rozmiarGenotypu) {
 		populacja = new ArrayList<Osobnik>();
-		double minDlugosc = Double.MAX_VALUE;
-		int minIndex = 0;
 		
 		for(int i=0; i<rozmiarPopulacji; i++) {
 			Osobnik osobnik = new Osobnik(rozmiarGenotypu);
-			if(minDlugosc > osobnik.dlugoscTrasy) {
-				minDlugosc = osobnik.dlugoscTrasy;
-				minIndex = i;
-			}
 			populacja.add(osobnik);
 		}
 		//wyœwietlanie osobnikow
@@ -57,18 +71,18 @@ public class Algorytm {
 			System.out.println(populacja.get(j).toString());
 		}
 		
-		najlepszeRozw = populacja.get(minIndex);		
+		najlepszeRozw = new Osobnik(najlepszeRozwWPop(populacja));		
 		return populacja;
 	}
 	
-	public void selekcjaTurniej(int N, int rozmiarPopulacji) {
+	public void selekcjaTurniej(int N, int rozmiarPopulacji, ArrayList<Osobnik> staraPopulacja) {
 		ArrayList<Osobnik> temp = new ArrayList<Osobnik>();
 		for(int i=0; i<rozmiarPopulacji; i++) {
 			temp.clear();
 			// wybór losowy N osobników z populacji 
 			for(int j=0; j < N; j++) {
 				int rand = (int)(Math.random()*Main.rozmiarPopulacji);
-				temp.add(new Osobnik(populacja.get(rand)));
+				temp.add(new Osobnik(staraPopulacja.get(rand)));
 			}
 //			System.out.println();
 //			for(int j=0; j<temp.size(); j++) {
@@ -139,16 +153,33 @@ public class Algorytm {
 		return temp;
 	}
 	
-	public Osobnik mutacja(Osobnik osobnik) {
+	public void mutacja(double prawdMutacji, ArrayList<Osobnik> populacja) {
+		for(int i=0; i< populacja.size(); i++) {
+			double pm = (Math.random());
+			if(pm <= prawdMutacji) 
+				mutacjaOsobnika(populacja.get(i));				
+		}					
+	}
+	
+	public Osobnik mutacjaOsobnika(Osobnik osobnik) {
 		int rand1 = (int)(Math.random()*Main.rozmiarGenotypu);
 		int rand2 = (int)(Math.random()*Main.rozmiarGenotypu);
 		int temp = osobnik.genotyp[rand1];
 		osobnik.genotyp[rand1] = osobnik.genotyp[rand2];
 		osobnik.genotyp[rand2] = temp;
+		osobnik.nowaDlugoscTrasy();
 		return osobnik;
 	}
 	
 	public void najlepszeRozw(ArrayList<Osobnik> pop) {
+		Osobnik temp = najlepszeRozwWPop(pop);
+		if(temp.dlugoscTrasy <= najlepszeRozw.dlugoscTrasy) {
+			najlepszeRozw = new Osobnik(temp);
+		}
+			
+	}
+	
+	public Osobnik najlepszeRozwWPop(ArrayList<Osobnik> pop) {
 		int minInd=0;
 		double minOdl = Double.MAX_VALUE;
 		for(int i=0; i<pop.size(); i++) {
@@ -157,7 +188,7 @@ public class Algorytm {
 				minInd = i;
 			}
 		}
-		najlepszeRozw = pop.get(minInd);
+		return pop.get(minInd);
 	}
 	
 	private void wyswietlNajlepszeRozw() {
