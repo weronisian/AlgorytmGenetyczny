@@ -4,6 +4,8 @@ public class Osobnik {
 
 	public int genotyp[];
 	private int rozmiar;
+	public double waga;
+	public double prawd;
 	public double dlugoscTrasy;
 	
 	//losowy genotyp
@@ -59,6 +61,10 @@ public class Osobnik {
 		return odleglosc;
 	}
 
+	public String genotypToString() {		
+		return "Osobnik: genotyp=" + Arrays.toString(genotyp);
+	}
+	
 	@Override
 	public String toString() {
 		return "Osobnik [genotyp=" + Arrays.toString(genotyp) + ", rozmiar=" + rozmiar + ", dlugoscTrasy="

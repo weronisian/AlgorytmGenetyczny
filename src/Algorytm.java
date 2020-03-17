@@ -18,43 +18,62 @@ public class Algorytm {
 	}
 	
 	public void start() {
-		nowaPopulacja = new ArrayList<Osobnik>();
-		selekcjaTurniej(3, Main.rozmiarPopulacji, populacja);
+		int n = 0;
+		while(n < iloscPokolen) {
+			n++;
+			nowaPopulacja = new ArrayList<Osobnik>();
+			if(!Main.czyRuletka)
+				selekcjaTurniej(3, Main.rozmiarPopulacji, populacja);
+			else
+				selekcjaRuletka(Main.rozmiarPopulacji, populacja);
+			
+//			System.out.println("Populacja: " + populacja.size() + " nowa: " + nowaPopulacja.size() );//
+			
+			//wyswietlanie wyniku po operacji
+//			System.out.println("\nNowa populacja po selekcji");
+			//wyœwietlanie osobnikow
+//			for(int j=0; j<nowaPopulacja.size(); j++) {
+//				System.out.println(nowaPopulacja.get(j).toString());
+//			}
+			najlepszeRozw(nowaPopulacja);
+//			wyswietlNajlepszeRozw();
 		
-		System.out.println("\nNowa populacja po selekcji");
-		//wyœwietlanie
-//		for(int j=0; j<nowaPopulacja.size(); j++) {
-//			System.out.println(nowaPopulacja.get(j).toString());
-//		}
-		najlepszeRozw(nowaPopulacja);
-		wyswietlNajlepszeRozw();
+			nowaPopulacja = krzyzowanie(nowaPopulacja);
 		
-		nowaPopulacja = krzyzowanie(nowaPopulacja);
+//			System.out.println("\nNowa populacja po krzyzowaniu");
+			//wyœwietlanie
+//			for(int j=0; j<nowaPopulacja.size(); j++) {
+//				System.out.println(nowaPopulacja.get(j).toString());
+//			}
+			najlepszeRozw(nowaPopulacja);
+//			wyswietlNajlepszeRozw();
 		
-		System.out.println("\nNowa populacja po krzyzowaniu");
-		//wyœwietlanie
-//		for(int j=0; j<nowaPopulacja.size(); j++) {
-//			System.out.println(nowaPopulacja.get(j).toString());
-//		}
-		najlepszeRozw(nowaPopulacja);
-		wyswietlNajlepszeRozw();
+			mutacja(prawdMut, nowaPopulacja);
 		
-		mutacja(prawdMut, nowaPopulacja);
+//			System.out.println("\nNowa populacja po mutacji");
+			//wyœwietlanie
+//			for(int j=0; j<nowaPopulacja.size(); j++) {
+//				System.out.println(nowaPopulacja.get(j).toString());
+//			}
+			najlepszeRozw(nowaPopulacja);
+			wyswietlNajlepszeRozw();
 		
-		System.out.println("\nNowa populacja po mutacji");
-		//wyœwietlanie
-//		for(int j=0; j<nowaPopulacja.size(); j++) {
-//			System.out.println(nowaPopulacja.get(j).toString());
-//		}
-		najlepszeRozw(nowaPopulacja);
-		wyswietlNajlepszeRozw();
-		
-		//zast¹pienie starej populacji now¹
-		populacja = nowaPopulacja;
-		
-		//do testowania mutacji
+			//zast¹pienie starej populacji now¹
+			populacja = nowaPopulacja;
+		}
+		wyswietlWynik();
+		//do testowania krzyzowania i mutacji
 //		Osobnik os = new Osobnik(11);
-//		System.out.println(os);
+//		Osobnik os2 = new Osobnik(11);
+//		ArrayList<Osobnik> lista = new ArrayList<>();
+//		lista.add(os);
+//		lista.add(os2);
+//		System.out.println("\n\n"+os);
+//		System.out.println(os2);
+//		lista = krzyzowanie(lista);
+//		for(int j=0; j<lista.size(); j++) {
+//			System.out.println(lista.get(j).toString());
+//		}
 //		mutacjaOsobnika(os);
 //		System.out.println(os);
 	}
@@ -67,9 +86,9 @@ public class Algorytm {
 			populacja.add(osobnik);
 		}
 		//wyœwietlanie osobnikow
-		for(int j=0; j<populacja.size(); j++) {
-			System.out.println(populacja.get(j).toString());
-		}
+//		for(int j=0; j<populacja.size(); j++) {
+//			System.out.println(populacja.get(j).toString());
+//		}
 		
 		najlepszeRozw = new Osobnik(najlepszeRozwWPop(populacja));		
 		return populacja;
@@ -102,20 +121,46 @@ public class Algorytm {
 		}
 	}
 	
-	public void selekcjaRuletka() {
-		
+	public void selekcjaRuletka(int rozmiarPopulacji, ArrayList<Osobnik> staraPopulacja) {
+		Osobnik maxOdl = najgorszeRozwWPop(staraPopulacja);
+		double sumaWeight = 0;
+		for(int i=0; i<staraPopulacja.size(); i++) {
+			staraPopulacja.get(i).waga = maxOdl.dlugoscTrasy - staraPopulacja.get(i).dlugoscTrasy;
+			sumaWeight += staraPopulacja.get(i).waga;
+		}
+		double ostatni = 0;
+		for(int j=0; j<staraPopulacja.size(); j++) {
+			double prawd = staraPopulacja.get(j).waga / sumaWeight;
+			staraPopulacja.get(j).prawd = ostatni + prawd;
+//			System.out.println("prawd: " + staraPopulacja.get(j).prawd);//
+			ostatni += prawd;
+		}
+		int n=0;
+		while(n < rozmiarPopulacji) {
+//			System.out.println("Rozmiar:" + n);//
+			n++;
+			double rand = (Math.random());
+			for(int k=0; k<staraPopulacja.size(); k++) {
+//				System.out.println("Rand:" + rand + " Stara pop: " + staraPopulacja.size());//
+				if(rand <= staraPopulacja.get(k).prawd) {
+					nowaPopulacja.add(new Osobnik(staraPopulacja.get(k)));
+					break;
+				}
+			}
+		}
 	}
 	
 	public ArrayList<Osobnik> krzyzowanie(ArrayList<Osobnik> populacja) {
 		ArrayList<Osobnik> temp = new ArrayList<Osobnik>();
 		Osobnik rodzic1, rodzic2, dziecko1, dziecko2;
+//		System.out.println("pop: "+ populacja.size());//
 		for(int i=0; i<populacja.size(); i+=2) {
 			dziecko1 = new Osobnik(Main.rozmiarGenotypu, true);
 			dziecko2 = new Osobnik(Main.rozmiarGenotypu, true);
 			rodzic1 = populacja.get(i);
 			rodzic2 = populacja.get(i+1);
-			int rand1 = (int)(Math.random()*populacja.size());
-			int rand2 = (int)(Math.random()*populacja.size());
+			int rand1 = (int)(Math.random()*Main.rozmiarGenotypu);
+			int rand2 = (int)(Math.random()*Main.rozmiarGenotypu);
 			if(rand1 > rand2) {
 				int t = rand1;
 				rand1 = rand2;
@@ -175,8 +220,7 @@ public class Algorytm {
 		Osobnik temp = najlepszeRozwWPop(pop);
 		if(temp.dlugoscTrasy <= najlepszeRozw.dlugoscTrasy) {
 			najlepszeRozw = new Osobnik(temp);
-		}
-			
+		}			
 	}
 	
 	public Osobnik najlepszeRozwWPop(ArrayList<Osobnik> pop) {
@@ -191,11 +235,26 @@ public class Algorytm {
 		return pop.get(minInd);
 	}
 	
+	public Osobnik najgorszeRozwWPop(ArrayList<Osobnik> pop) {
+		int maxInd=0;
+		double maxOdl = 0;
+		for(int i=0; i<pop.size(); i++) {
+			if(maxOdl < pop.get(i).dlugoscTrasy) {
+				maxOdl = pop.get(i).dlugoscTrasy;
+				maxInd = i;
+			}
+		}
+		return pop.get(maxInd);
+	}
+	
 	private void wyswietlNajlepszeRozw() {
-//		System.out.println("\n---------------\nAlgorytm losowy \nNajlepsze rozwi¹zanie: " + String.format("%.2f", najlepszeRozw.dlugoscTrasy));
 		System.out.println("Najlepsze rozwi¹zanie: " + String.format("%.2f", najlepszeRozw.dlugoscTrasy));	
 	}
 	
+	private void wyswietlWynik() {
+		System.out.println("\n---------------\nAlgorytm ewolucyjny \nNajlepsze rozwi¹zanie: " + String.format("%.2f", najlepszeRozw.dlugoscTrasy)
+		+ "\n" + najlepszeRozw.genotypToString());
+	}
 	
 	
 	

@@ -6,7 +6,7 @@ public class Main {
 	public static int rozmiarPopulacji;
 	public static int liczbaPowtorzen;
 	public static double prawdMutacji;
-//	public static int liczbaPowtorzen;
+	public static boolean czyRuletka;
 	public static ArrayList<Miejsce> listaMiejsc;
 	public static String [] pliki = {"berlin11_modified.tsp", "berlin52.tsp", "kroA100.tsp", "kroA150.tsp", "kroA200.tsp", "fl417.tsp", "pr2392.tsp"};
 		
@@ -17,13 +17,14 @@ public class Main {
 		Plik plik1 = new Plik(pliki[0]);
 		plik1.odczyt();	
 				
-		rozmiarPopulacji = 10;
-		liczbaPowtorzen = 10;
-		prawdMutacji = 0.9;
+		rozmiarPopulacji = 100;
+		liczbaPowtorzen = 100;
+		prawdMutacji = 0.3;
+		czyRuletka = true;
 		Algorytm algorytm = new Algorytm(rozmiarPopulacji, rozmiarGenotypu, liczbaPowtorzen, prawdMutacji);
 		algorytm.start();
 		
-//		AlgorytmZachlanny algZachlanny = new AlgorytmZachlanny(rozmiarGenotypu);
+		AlgorytmZachlanny algZachlanny = new AlgorytmZachlanny(rozmiarGenotypu);
 
 	}
 
