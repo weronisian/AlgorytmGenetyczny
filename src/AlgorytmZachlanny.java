@@ -30,11 +30,9 @@ public class AlgorytmZachlanny {
 	}
 	
 	public void generujRozwiazanie(int rand) {
-//		int rand = (int)(Math.random()*Main.rozmiarGenotypu)+1;
 		optymalneRozw.genotyp[0] = rand;
 		visited[rand-1] = true;
-		
-		
+				
 		int lastNode = rand;
 		int bestNode = -1;
 		double bestOdleglosc;
@@ -53,8 +51,7 @@ public class AlgorytmZachlanny {
 			lastNode = bestNode;
 			visited[bestNode-1] = true;
 			optymalneRozw.genotyp[i] = bestNode;
-//			System.out.println(optymalneRozw);
-			
+//			System.out.println(optymalneRozw);			
 		}
 		optymalneRozw.dlugoscTrasy = optymalneRozw.obliczDlugoscTrasy();
 	}

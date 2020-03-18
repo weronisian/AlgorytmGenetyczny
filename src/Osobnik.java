@@ -16,6 +16,7 @@ public class Osobnik {
 		dlugoscTrasy = obliczDlugoscTrasy();
 	}
 	
+	//skopowiowanie osobnika
 	public Osobnik(Osobnik os) {
 		this.rozmiar = os.rozmiar;
 		this.genotyp = new int[rozmiar];

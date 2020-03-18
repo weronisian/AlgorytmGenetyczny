@@ -7,12 +7,17 @@ public class Algorytm {
 	public static ArrayList<Osobnik> populacja;
 	public ArrayList<Osobnik> nowaPopulacja;
 	private Osobnik najlepszeRozw;
+	private double prawdKrzy;
 	private double prawdMut;
 	private int iloscPokolen;
+	public int nr_pokolenia;
+	public double najgorsza_ocena, najlepsza_ocena, œrednia_ocen;
 
-	public Algorytm(int rozmiarPopulacji, int rozmiarGenotypu, int iloscPokolen, double prawdMutacji) {
+	public Algorytm(int rozmiarPopulacji, int rozmiarGenotypu, int iloscPokolen, double prawdKrzyzowania, double prawdMutacji) {
+		this.prawdKrzy = prawdKrzyzowania;
 		this.prawdMut = prawdMutacji;
 		this.iloscPokolen = iloscPokolen;
+		this.nr_pokolenia = 0;
 		Algorytm.populacja = wygenerujPopulacje(rozmiarPopulacji, rozmiarGenotypu);
 		wyswietlNajlepszeRozw();		
 	}
@@ -21,6 +26,7 @@ public class Algorytm {
 		int n = 0;
 		while(n < iloscPokolen) {
 			n++;
+			nr_pokolenia = n;
 			nowaPopulacja = new ArrayList<Osobnik>();
 			if(!Main.czyRuletka)
 				selekcjaTurniej(3, Main.rozmiarPopulacji, populacja);
@@ -38,7 +44,7 @@ public class Algorytm {
 			najlepszeRozw(nowaPopulacja);
 //			wyswietlNajlepszeRozw();
 		
-			nowaPopulacja = krzyzowanie(nowaPopulacja);
+			nowaPopulacja = krzyzowanie(prawdKrzy, nowaPopulacja);
 		
 //			System.out.println("\nNowa populacja po krzyzowaniu");
 			//wyœwietlanie
@@ -51,7 +57,7 @@ public class Algorytm {
 			mutacja(prawdMut, nowaPopulacja);
 		
 //			System.out.println("\nNowa populacja po mutacji");
-			//wyœwietlanie
+//			//wyœwietlanie
 //			for(int j=0; j<nowaPopulacja.size(); j++) {
 //				System.out.println(nowaPopulacja.get(j).toString());
 //			}
@@ -60,6 +66,7 @@ public class Algorytm {
 		
 			//zast¹pienie starej populacji now¹
 			populacja = nowaPopulacja;
+			
 		}
 		wyswietlWynik();
 		//do testowania krzyzowania i mutacji
@@ -150,48 +157,55 @@ public class Algorytm {
 		}
 	}
 	
-	public ArrayList<Osobnik> krzyzowanie(ArrayList<Osobnik> populacja) {
+	public ArrayList<Osobnik> krzyzowanie(double prawdKrzyzowania, ArrayList<Osobnik> populacja) {
 		ArrayList<Osobnik> temp = new ArrayList<Osobnik>();
 		Osobnik rodzic1, rodzic2, dziecko1, dziecko2;
 //		System.out.println("pop: "+ populacja.size());//
 		for(int i=0; i<populacja.size(); i+=2) {
-			dziecko1 = new Osobnik(Main.rozmiarGenotypu, true);
-			dziecko2 = new Osobnik(Main.rozmiarGenotypu, true);
+			double prawd = Math.random();
 			rodzic1 = populacja.get(i);
 			rodzic2 = populacja.get(i+1);
-			int rand1 = (int)(Math.random()*Main.rozmiarGenotypu);
-			int rand2 = (int)(Math.random()*Main.rozmiarGenotypu);
-			if(rand1 > rand2) {
-				int t = rand1;
-				rand1 = rand2;
-				rand2 = t;
-			}// rand1 zawsze <= od rand2
-			Set <Integer> set1 = new HashSet<Integer>();
-			Set <Integer> set2 = new HashSet<Integer>();
-			for(int j=0; j<Main.rozmiarGenotypu; j++) {
-				if(rand1<=j && j<=rand2) {
-					dziecko1.genotyp[j] = rodzic1.genotyp[j];
-					dziecko2.genotyp[j] = rodzic2.genotyp[j];
-					set1.add(dziecko1.genotyp[j]);
-					set2.add(dziecko2.genotyp[j]);
-				} 						
+			if(prawd < prawdKrzyzowania) {
+				dziecko1 = new Osobnik(Main.rozmiarGenotypu, true);
+				dziecko2 = new Osobnik(Main.rozmiarGenotypu, true);
+				int rand1 = (int)(Math.random()*Main.rozmiarGenotypu);
+				int rand2 = (int)(Math.random()*Main.rozmiarGenotypu);
+				if(rand1 > rand2) {
+					int t = rand1;
+					rand1 = rand2;
+					rand2 = t;
+				}// rand1 zawsze <= od rand2
+				Set <Integer> set1 = new HashSet<Integer>();
+				Set <Integer> set2 = new HashSet<Integer>();
+				for(int j=0; j<Main.rozmiarGenotypu; j++) {
+					if(rand1<=j && j<=rand2) {
+						dziecko1.genotyp[j] = rodzic1.genotyp[j];
+						dziecko2.genotyp[j] = rodzic2.genotyp[j];
+						set1.add(dziecko1.genotyp[j]);
+						set2.add(dziecko2.genotyp[j]);
+					} 						
+				}
+				for(int k=0; k<Main.rozmiarGenotypu; k++) {
+					if(!set1.contains(rodzic2.genotyp[k])) {
+						int x=0;
+						while(dziecko1.genotyp[x]!=0 && x<Main.rozmiarGenotypu-1)
+							x++;
+						dziecko1.genotyp[x] = rodzic2.genotyp[k];							
+					}	
+					if(!set2.contains(rodzic1.genotyp[k])) {
+						int x=0;
+						while(dziecko2.genotyp[x]!=0 && x<Main.rozmiarGenotypu-1)
+							x++;
+						dziecko2.genotyp[x] = rodzic1.genotyp[k];							
+					}			
+				}
+				dziecko1.dlugoscTrasy = dziecko1.obliczDlugoscTrasy();
+				dziecko2.dlugoscTrasy = dziecko2.obliczDlugoscTrasy();
+			} else {
+				dziecko1 = new Osobnik(rodzic1);
+				dziecko2 = new Osobnik(rodzic2);
 			}
-			for(int k=0; k<Main.rozmiarGenotypu; k++) {
-				if(!set1.contains(rodzic2.genotyp[k])) {
-					int x=0;
-					while(dziecko1.genotyp[x]!=0 && x<Main.rozmiarGenotypu-1)
-						x++;
-					dziecko1.genotyp[x] = rodzic2.genotyp[k];							
-				}	
-				if(!set2.contains(rodzic1.genotyp[k])) {
-					int x=0;
-					while(dziecko2.genotyp[x]!=0 && x<Main.rozmiarGenotypu-1)
-						x++;
-					dziecko2.genotyp[x] = rodzic1.genotyp[k];							
-				}			
-			}
-			dziecko1.dlugoscTrasy = dziecko1.obliczDlugoscTrasy();
-			dziecko2.dlugoscTrasy = dziecko2.obliczDlugoscTrasy();
+			
 			temp.add(dziecko1);
 			temp.add(dziecko2);			
 		}
@@ -238,13 +252,27 @@ public class Algorytm {
 	public Osobnik najgorszeRozwWPop(ArrayList<Osobnik> pop) {
 		int maxInd=0;
 		double maxOdl = 0;
+		double œrednia = 0;
 		for(int i=0; i<pop.size(); i++) {
 			if(maxOdl < pop.get(i).dlugoscTrasy) {
 				maxOdl = pop.get(i).dlugoscTrasy;
 				maxInd = i;
 			}
+			œrednia += pop.get(i).dlugoscTrasy;
 		}
+		œrednia_ocen = œrednia / pop.size();
 		return pop.get(maxInd);
+	}
+	
+	public void obliczOceny(ArrayList<Osobnik> pop) {
+		Osobnik os = najgorszeRozwWPop(pop);
+		najgorsza_ocena = os.dlugoscTrasy;
+		os = najlepszeRozwWPop(pop);
+		najlepsza_ocena = os.dlugoscTrasy;		
+	}
+	
+	public void wyswitetlRozmiarPop() {
+		System.out.println("Rozmiar populacji: "+populacja.size());
 	}
 	
 	private void wyswietlNajlepszeRozw() {
