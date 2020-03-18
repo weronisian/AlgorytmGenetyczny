@@ -68,14 +68,13 @@ public class Plik {
 	public void zapis(int nr_pokolenia, double najlepsza_ocena, double œrednia_ocen, double najgorsza_ocena) {
 		File plik2 = new File("Wyniki.csv");
 		try {
-			BufferedWriter zapis = new BufferedWriter(new FileWriter(plik2));
+			BufferedWriter zapis = new BufferedWriter(new FileWriter(plik2, true));
 			
 			zapis.write(Integer.toString(nr_pokolenia));
 			zapis.write(";"+String.format("%.2f",najlepsza_ocena));
 			zapis.write(";"+String.format("%.2f",œrednia_ocen));
 			zapis.write(";"+String.format("%.2f",najgorsza_ocena)+";");
 			zapis.newLine();
-			
 			zapis.close();
 		} catch (Exception e) {
 			e.printStackTrace();

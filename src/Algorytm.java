@@ -13,13 +13,23 @@ public class Algorytm {
 	public int nr_pokolenia;
 	public double najgorsza_ocena, najlepsza_ocena, œrednia_ocen;
 
+	
+	public Algorytm() {
+		
+	}
+	
 	public Algorytm(int rozmiarPopulacji, int rozmiarGenotypu, int iloscPokolen, double prawdKrzyzowania, double prawdMutacji) {
 		this.prawdKrzy = prawdKrzyzowania;
 		this.prawdMut = prawdMutacji;
 		this.iloscPokolen = iloscPokolen;
 		this.nr_pokolenia = 0;
 		Algorytm.populacja = wygenerujPopulacje(rozmiarPopulacji, rozmiarGenotypu);
-		wyswietlNajlepszeRozw();		
+		wyswietlNajlepszeRozw();
+		if(Main.czyZapis) {
+			Plik plik = new Plik();
+			obliczOceny(populacja);
+			plik.zapis(nr_pokolenia, najlepsza_ocena, œrednia_ocen, najgorsza_ocena );
+		}
 	}
 	
 	public void start() {
@@ -28,8 +38,10 @@ public class Algorytm {
 			n++;
 			nr_pokolenia = n;
 			nowaPopulacja = new ArrayList<Osobnik>();
+			nowaPopulacja.add(new Osobnik(najlepszeRozw));
+			
 			if(!Main.czyRuletka)
-				selekcjaTurniej(3, Main.rozmiarPopulacji, populacja);
+				selekcjaTurniej(Main.rozmiarSelekcji, Main.rozmiarPopulacji, populacja);
 			else
 				selekcjaRuletka(Main.rozmiarPopulacji, populacja);
 			
@@ -67,6 +79,12 @@ public class Algorytm {
 			//zast¹pienie starej populacji now¹
 			populacja = nowaPopulacja;
 			
+			//zapis do pliku
+			if(Main.czyZapis) {
+				Plik plik = new Plik();
+				obliczOceny(populacja);
+				plik.zapis(nr_pokolenia, najlepsza_ocena, œrednia_ocen, najgorsza_ocena );
+			}
 		}
 		wyswietlWynik();
 		//do testowania krzyzowania i mutacji
@@ -161,7 +179,7 @@ public class Algorytm {
 		ArrayList<Osobnik> temp = new ArrayList<Osobnik>();
 		Osobnik rodzic1, rodzic2, dziecko1, dziecko2;
 //		System.out.println("pop: "+ populacja.size());//
-		for(int i=0; i<populacja.size(); i+=2) {
+		for(int i=0; i<populacja.size()-1; i+=2) {
 			double prawd = Math.random();
 			rodzic1 = populacja.get(i);
 			rodzic2 = populacja.get(i+1);
@@ -273,6 +291,10 @@ public class Algorytm {
 	
 	public void wyswitetlRozmiarPop() {
 		System.out.println("Rozmiar populacji: "+populacja.size());
+	}
+	
+	public Osobnik getNajlepszeRozw() {
+		return najlepszeRozw;
 	}
 	
 	private void wyswietlNajlepszeRozw() {
