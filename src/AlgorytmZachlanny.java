@@ -41,7 +41,6 @@ public class AlgorytmZachlanny {
 			for(int j=0; j<Main.rozmiarGenotypu; j++) {
 				if(visited[j] == false) {
 					double odleglosc = optymalneRozw.odlegloscEuklidesowa(Main.listaMiejsc.get(lastNode-1), Main.listaMiejsc.get(j));
-//					System.out.println("i:"+i+" j:"+j+" odl:"+odleglosc);
 					if(odleglosc < bestOdleglosc) {
 						bestNode = Main.listaMiejsc.get(j).getNr();
 						bestOdleglosc = odleglosc;

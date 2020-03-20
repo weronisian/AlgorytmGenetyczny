@@ -12,10 +12,13 @@ public class Algorytm {
 	private int iloscPokolen;
 	public int nr_pokolenia;
 	public double najgorsza_ocena, najlepsza_ocena, œrednia_ocen;
-
 	
-	public Algorytm() {
-		
+	public Algorytm() {		
+	}
+	
+	public Algorytm(boolean czyLosowy) {
+		Algorytm.populacja = wygenerujPopulacje(Main.rozmiarPopulacji, Main.rozmiarGenotypu);
+		wyswietlNajlepszeRozw();
 	}
 	
 	public Algorytm(int rozmiarPopulacji, int rozmiarGenotypu, int iloscPokolen, double prawdKrzyzowania, double prawdMutacji) {
@@ -44,9 +47,7 @@ public class Algorytm {
 				selekcjaTurniej(Main.rozmiarSelekcji, Main.rozmiarPopulacji, populacja);
 			else
 				selekcjaRuletka(Main.rozmiarPopulacji, populacja);
-			
-//			System.out.println("Populacja: " + populacja.size() + " nowa: " + nowaPopulacja.size() );//
-			
+						
 			//wyswietlanie wyniku po operacji
 //			System.out.println("\nNowa populacja po selekcji");
 			//wyœwietlanie osobnikow
@@ -128,12 +129,8 @@ public class Algorytm {
 				int rand = (int)(Math.random()*Main.rozmiarPopulacji);
 				temp.add(new Osobnik(staraPopulacja.get(rand)));
 			}
-//			System.out.println();
-//			for(int j=0; j<temp.size(); j++) {
-//				System.out.println(temp.get(j).toString());
-//			}
 			
-			//skopiowanie najlepszego do nowej populacji
+			//skopiowanie najlepszego z N osobników do nowej populacji
 			int bestIndex = 0;
 			double bestOdl = Double.MAX_VALUE;
 			for(int k=0; k < temp.size(); k++) {
@@ -157,16 +154,13 @@ public class Algorytm {
 		for(int j=0; j<staraPopulacja.size(); j++) {
 			double prawd = staraPopulacja.get(j).waga / sumaWeight;
 			staraPopulacja.get(j).prawd = ostatni + prawd;
-//			System.out.println("prawd: " + staraPopulacja.get(j).prawd);//
 			ostatni += prawd;
 		}
 		int n=0;
 		while(n < rozmiarPopulacji) {
-//			System.out.println("Rozmiar:" + n);//
 			n++;
 			double rand = (Math.random());
 			for(int k=0; k<staraPopulacja.size(); k++) {
-//				System.out.println("Rand:" + rand + " Stara pop: " + staraPopulacja.size());//
 				if(rand <= staraPopulacja.get(k).prawd) {
 					nowaPopulacja.add(new Osobnik(staraPopulacja.get(k)));
 					break;
@@ -178,7 +172,6 @@ public class Algorytm {
 	public ArrayList<Osobnik> krzyzowanie(double prawdKrzyzowania, ArrayList<Osobnik> populacja) {
 		ArrayList<Osobnik> temp = new ArrayList<Osobnik>();
 		Osobnik rodzic1, rodzic2, dziecko1, dziecko2;
-//		System.out.println("pop: "+ populacja.size());//
 		for(int i=0; i<populacja.size()-1; i+=2) {
 			double prawd = Math.random();
 			rodzic1 = populacja.get(i);
